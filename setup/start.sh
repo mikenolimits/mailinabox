@@ -2,12 +2,12 @@
 # This is the entry point for configuring the system.
 #####################################################
 
-source /mailinabox/setup/functions.sh # load our functions
+source functions.sh # load our functions
 
 # Check system setup: Are we running as root on Ubuntu 14.04 on a
 # machine with enough memory? Is /tmp mounted with exec.
 # If not, this shows an error and exits.
-source /mailinabox/setup/preflight.sh
+source preflight.sh
 
 # Ensure Python reads/writes files in UTF-8. If the machine
 # triggers some other locale in Python, like ASCII encoding,
@@ -55,14 +55,14 @@ chmod +x /usr/local/bin/mailinabox
 # if values have not already been set in environment variables. When running
 # non-interactively, be sure to set values for all! Also sets STORAGE_USER and
 # STORAGE_ROOT.
-source /mailinabox/setup/questions.sh
+source questions.sh
 
 # Run some network checks to make sure setup on this machine makes sense.
 # Skip on existing installs since we don't want this to block the ability to
 # upgrade, and these checks are also in the control panel status checks.
 if [ -z "$DEFAULT_PRIMARY_HOSTNAME" ]; then
 if [ -z "$SKIP_NETWORK_CHECKS" ]; then
-	source /mailinabox/setup/network-checks.sh
+	source network-checks.sh
 fi
 fi
 
@@ -96,20 +96,20 @@ PRIVATE_IPV6=$PRIVATE_IPV6
 EOF
 
 # Start service configuration.
-source /mailinabox/setup/system.sh
-source /mailinabox/setup/ssl.sh
-source /mailinabox/setup/dns.sh
-source /mailinabox/setup/mail-postfix.sh
-source /mailinabox/setup/mail-dovecot.sh
-source /mailinabox/setup/mail-users.sh
-source /mailinabox/setup/dkim.sh
-source /mailinabox/setup/spamassassin.sh
-source /mailinabox/setup/web.sh
-source /mailinabox/setup/webmail.sh
-source /mailinabox/setup/owncloud.sh
-source /mailinabox/setup/zpush.sh
-source /mailinabox/setup/management.sh
-source /mailinabox/setup/munin.sh
+source system.sh
+source ssl.sh
+source dns.sh
+source mail-postfix.sh
+source mail-dovecot.sh
+source mail-users.sh
+source dkim.sh
+source spamassassin.sh
+source web.sh
+source webmail.sh
+source owncloud.sh
+source zpush.sh
+source management.sh
+source munin.sh
 
 # Ping the management daemon to write the DNS and nginx configuration files.
 until nc -z -w 4 127.0.0.1 10222
@@ -125,7 +125,7 @@ tools/web_update
 management/ssl_certificates.py -q
 
 # If there aren't any mail users yet, create one.
-source /mailinabox/setup/firstuser.sh
+source firstuser.sh
 
 # Done.
 echo
